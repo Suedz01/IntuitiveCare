@@ -1,13 +1,13 @@
 <template>
   <div>
-    <h1>Busca de Procedimentos</h1>
-    <input v-model="query" @input="searchPeople" placeholder="Buscar Procedimento ou Grupo" />
+    <h1>Busca de Operadoras</h1>
+    <input v-model="query" @input="searchOperators" placeholder="Buscar por Razão Social ou Nome Fantasia" />
     
     <div v-if="loading">Carregando...</div>
     
     <ul v-if="results.length > 0">
       <li v-for="(item, index) in results" :key="index">
-        {{ item.PROCEDIMENTO }} - {{ item.GRUPO }}
+        {{ item.Razao_Social }} - {{ item.Nome_Fantasia || 'Sem Nome Fantasia' }}
       </li>
     </ul>
     
@@ -27,7 +27,7 @@ export default {
     };
   },
   methods: {
-    searchPeople() {
+    searchOperators() {
       if (this.query.trim() === '') {
         this.results = [];
         return;
@@ -40,7 +40,7 @@ export default {
           this.results = response.data;
         })
         .catch(error => {
-          console.error('Erro ao buscar procedimentos:', error);
+          console.error('Erro ao buscar operadoras:', error);
         })
         .finally(() => {
           this.loading = false;

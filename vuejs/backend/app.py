@@ -1,15 +1,17 @@
 from flask import Flask, request, jsonify
-from flask_cors import CORS  # Importar o CORS
+from flask_cors import CORS
 import csv
 
 app = Flask(__name__)
 CORS(app)  # Habilitar CORS para todas as origens
 
+CSV_FILE = 'Relatorio_cadop.csv'
+
 # Carregar dados do arquivo CSV
 def load_data():
     data = []
-    with open('dados_extraidos.csv', 'r', encoding='utf-8') as file:
-        reader = csv.DictReader(file)
+    with open(CSV_FILE, 'r', encoding='utf-8') as file:
+        reader = csv.DictReader(file, delimiter=';')  # Usando ';' como delimitador
         for row in reader:
             data.append(row)
     return data
@@ -17,7 +19,7 @@ def load_data():
 # Rota de busca textual
 @app.route('/search', methods=['GET'])
 def search():
-    query = request.args.get('query', '').lower()  # Tornar a consulta minúscula para comparação
+    query = request.args.get('query', '').lower()
     data = load_data()
 
     # Filtra os dados que contêm o texto da consulta nos campos de interesse

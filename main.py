@@ -4,8 +4,7 @@ from pathlib import Path
 import pandas as pd
 
 # 1.2. Acesso aos PDFs (Anexo I e II) manualmente
-# Supondo que você já tenha os arquivos PDF locais
-pdf_paths = ["Anexo_I.pdf", "Anexo_II.pdf"]  # Substitua pelos caminhos corretos dos seus PDFs
+pdf_paths = ["Anexo_I.pdf", "Anexo_II.pdf"] 
 
 # 1.3. Compactação dos arquivos PDF em um único ZIP
 with zipfile.ZipFile("Anexos.zip", 'w', zipfile.ZIP_DEFLATED) as zipf:
@@ -49,7 +48,5 @@ csv_path = "dados_extraidos.csv"
 df.to_csv(csv_path, index=False)
 
 # Compactação do CSV em um arquivo ZIP
-with zipfile.ZipFile(f"Teste_{'seu_nome'}.zip", 'w', zipfile.ZIP_DEFLATED) as zipf:
+with zipfile.ZipFile(f"ArquivosCSV.zip", 'w', zipfile.ZIP_DEFLATED) as zipf:
     zipf.write(csv_path, arcname="dados_extraidos.csv")
-
-print("Processo completo!")

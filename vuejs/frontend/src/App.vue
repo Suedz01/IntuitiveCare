@@ -1,41 +1,39 @@
 <template>
-  <html>
-    <body>
-      <div id="app">
-        <img src="https://voxcapital.com.br/wp-content/uploads/2022/05/intuitive-care_site-2-2048x519.png" alt="Logo" class="logo">
-        <h1>Pesquisa de Procedimentos</h1>
+  <div id="app">
+    <img src="https://voxcapital.com.br/wp-content/uploads/2022/05/intuitive-care_site-2-2048x519.png" alt="Logo" class="logo">
+    <h1>Pesquisa de Operadoras</h1>
 
-        <div class="search-container">
-          <input
-            type="text"
-            v-model="searchQuery"
-            placeholder="Digite o nome ou grupo do procedimento"
-            @keyup.enter="searchPeople"
-          />
-          <button @click="searchPeople">Pesquisar</button>
-        </div>
+    <div class="search-container">
+      <input
+        type="text"
+        v-model="searchQuery"
+        placeholder="Digite o nome ou CNPJ da operadora"
+        @keyup.enter="searchOperators"
+      />
+      <button @click="searchOperators">Pesquisar</button>
+    </div>
 
-        <div v-if="loading" class="loading">Carregando...</div>
+    <div v-if="loading" class="loading">Carregando...</div>
 
-        <div v-if="people.length > 0" class="results">
-          <ul>
-            <li v-for="(person, index) in people" :key="index">
-              <strong>{{ person.PROCEDIMENTO }}</strong>
-              <p>Grupo: {{ person.GRUPO }}</p>
-            </li>
-          </ul>
-        </div>
+    <div v-if="operators.length > 0" class="results">
+      <ul>
+        <li v-for="(operator, index) in operators" :key="index">
+          <strong>{{ operator.Razao_Social }}</strong>
+          <p>Nome Fantasia: {{ operator.Nome_Fantasia || 'N/A' }}</p>
+          <p>CNPJ: {{ operator.CNPJ }}</p>
+          <p>Modalidade: {{ operator.Modalidade }}</p>
+        </li>
+      </ul>
+    </div>
 
-        <div v-if="people.length === 0 && !loading" class="no-results">
-          <p>Nenhum resultado encontrado.</p>
-        </div>
+    <div v-if="operators.length === 0 && !loading" class="no-results">
+      <p>Nenhum resultado encontrado.</p>
+    </div>
 
-        <footer class="rodape">
-          <p>Feito por Alexandre Sued</p>
-        </footer>
-      </div>
-    </body>
-  </html>
+    <footer class="rodape">
+      <p>Feito por Alexandre Sued</p>
+    </footer>
+  </div>
 </template>
 
 <script>
@@ -43,21 +41,21 @@ export default {
   data() {
     return {
       searchQuery: "",
-      people: [],
+      operators: [],
       loading: false,
     };
   },
   methods: {
-    async searchPeople() {
+    async searchOperators() {
       if (!this.searchQuery) return;
 
       this.loading = true;
       try {
         const response = await fetch(`http://localhost:5000/search?query=${this.searchQuery}`);
         const data = await response.json();
-        this.people = data;
+        this.operators = data;
       } catch (error) {
-        console.error("Erro ao buscar procedimentos:", error);
+        console.error("Erro ao buscar operadoras:", error);
       } finally {
         this.loading = false;
       }
@@ -75,26 +73,21 @@ export default {
   background: #0f0e17;
   color: #fffffe;
   padding: 20px;
-  justify-content: center;
-  align-content: center;
   min-height: 92.5vh;
-  margin: 0;
   position: relative;
-  padding-bottom: 60px; /* Espaço para o footer */
+  padding-bottom: 60px;
 }
 
-
-body{
+body {
   background: #0f0e17;
-  margin:0px 0px;
-  padding:0px;
+  margin: 0;
+  padding: 0;
 }
 
 .logo {
   display: block;
   margin: 0 auto 20px;
   max-width: 20%;
-  height: auto;
 }
 
 .rodape {
@@ -104,14 +97,13 @@ body{
   position: fixed;
   bottom: 0;
   left: 0;
-  padding: 10px; 
+  padding: 10px;
   width: 100%;
 }
 
 h1 {
   font-family: 'Kanit', sans-serif;
   color: #fffffe;
-  font-weight: 700;
 }
 
 .search-container {
@@ -122,12 +114,10 @@ input {
   padding: 10px;
   font-size: 16px;
   width: 300px;
-  margin-right: 10px;
   background: #1a1b26;
   border: 1px solid #ff8906;
   color: #fffffe;
   border-radius: 5px;
-  font-family: 'Dosis', sans-serif;
 }
 
 button {
@@ -139,7 +129,6 @@ button {
   border-radius: 5px;
   cursor: pointer;
   transition: 0.3s;
-  font-family: 'Dosis', sans-serif;
 }
 
 button:hover {
@@ -162,13 +151,10 @@ button:hover {
 .results strong {
   color: #fffffe;
   font-family: 'Kanit', sans-serif;
-  font-weight: 700;
 }
 
 .results p {
   color: #a7a9be;
-  font-family: 'Dosis', sans-serif;
-  font-weight: 400;
 }
 
 .loading {
